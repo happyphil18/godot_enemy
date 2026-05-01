@@ -1,0 +1,34 @@
+@startmindmap
+title Game Scene Tree + enemy.tscn 攻擊版責任圖
+* Godot 場景結構
+** game.tscn : Node2D\n主場景
+*** GameManager : Node\n管理分數與血量 UI
+**** ScoreLabel : Label\n顯示分數文字
+**** HealthHUD : CanvasLayer\n血量顯示圖層
+***** HealthRow : HBoxContainer\n血量圖示容器
+****** Fruit1 : TextureRect\n第 1 顆血量圖示
+****** Fruit2 : TextureRect\n第 2 顆血量圖示
+****** Fruit3 : TextureRect\n第 3 顆血量圖示
+****** Fruit4 : TextureRect\n第 4 顆血量圖示
+****** Fruit5 : TextureRect\n第 5 顆血量圖示
+*** TileMap : TileMap\n地圖與平台
+*** Player : CharacterBody2D\n玩家移動、跳躍、受傷、擊退
+**** AnimatedSprite2D : AnimatedSprite2D\n播放玩家動畫
+**** CollisionShape2D : CollisionShape2D\n玩家碰撞範圍
+**** Camera2D : Camera2D\n跟隨玩家視角
+*** EnemyPatrol : CharacterBody2D\nenemy.tscn 實例，基礎巡邏敵人
+*** EnemyPatrolMedium : CharacterBody2D\nenemy.tscn 實例，中速巡邏敵人
+*** EnemyPatrolFast : CharacterBody2D\nenemy.tscn 實例，高速巡邏敵人
+*** EnemyPatrolGround : CharacterBody2D\nenemy.tscn 實例，地面巡邏敵人
+*** EnemyChase : CharacterBody2D\nenemy.tscn 實例，會追蹤玩家
+*** EnemyAttack : CharacterBody2D\nenemy.tscn 實例，會追蹤並攻擊
+*** Labels : Node\n關卡說明文字容器
+**** Label : Label\n第 1 關：巡邏 Patrol
+**** Label2 : Label\n第 2 關：追蹤 Chase
+**** Label3 : Label\n第 3 關：攻擊 Attack
+**** Label4 : Label\n敵人 AI 三段練習地圖
+** enemy.tscn : CharacterBody2D\n共用敵人場景模板
+*** AnimatedSprite2D : AnimatedSprite2D\n播放敵人動畫與攻擊閃色
+*** CollisionShape2D : CollisionShape2D\n敵人碰撞範圍
+*** RayCast2D : RayCast2D\n偵測前下方是否有地板
+@endmindmap

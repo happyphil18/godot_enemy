@@ -1,0 +1,39 @@
+@startuml
+left to right direction
+
+rectangle "Player\n玩家" as Player
+rectangle "Enemy\n敵人" as Enemy
+rectangle "GameManager\n管理分數與血量" as GameManager
+rectangle "HUD\nHealthHUD / Fruit Icons" as HUD
+rectangle "RayCast2D\n平台邊緣偵測" as RayCast
+rectangle "TileMap / Wall\n平台與牆面" as World
+
+Player -[hidden]-> GameManager
+GameManager -[hidden]-> HUD
+RayCast -[hidden]down-> Enemy
+World -[hidden]down-> Player
+
+Enemy --> Player : a1 讀取位置做追蹤判定
+Enemy --> Player : a2 讀取水平 / 垂直距離做攻擊判定
+Enemy --> Player : a3 攻擊時呼叫 take_damage
+Player --> GameManager : a4 呼叫 set_health
+GameManager --> HUD : a5 更新血量顯示
+
+note right of Player
+  攻擊分支
+  a1 -> a2 -> a3 -> a4 -> a5
+end note
+
+RayCast --> Enemy : b1 回報前方是否仍有地板
+Enemy --> Enemy : b2 無地板時反轉 direction
+
+World --> Enemy : c1 撞牆時 is_on_wall() 為 true
+Enemy --> Enemy : c2 反轉 direction
+
+legend right
+  |= Flow |= 說明 |
+  | a | 敵人讀取玩家位置，進入攻擊後讓玩家扣血並更新 HUD |
+  | b | 巡邏 / 追蹤時，因前方沒有地板而轉向 |
+  | c | 巡邏 / 追蹤時，因撞牆而轉向 |
+endlegend
+@enduml

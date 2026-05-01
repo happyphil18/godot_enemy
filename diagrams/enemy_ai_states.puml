@@ -1,0 +1,21 @@
+@startuml enemy_ai_states
+title 敵人 AI 狀態圖
+
+hide empty description
+
+state Patrol
+state Chase
+state Attack
+
+[*] --> Patrol
+
+Patrol --> Chase : 玩家進入偵測範圍，can_chase = true
+Chase --> Patrol : 玩家離開偵測範圍
+
+Chase --> Attack : 玩家進入攻擊範圍，can_attack = true
+Attack --> Chase : 玩家離開攻擊範圍
+
+Patrol --> Patrol : 前方沒地板或撞牆就轉向
+Chase --> Chase : 追蹤時持續更新方向
+Attack --> Attack : 冷卻結束後可再次攻擊
+@enduml
