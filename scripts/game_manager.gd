@@ -25,6 +25,9 @@ func set_health(value: int) -> void:
 	current_health = clamp(value, 0, max_health)
 	_update_health_hud()
 
+func heal(amount: int) -> void:
+	set_health(current_health + amount)
+
 func _update_health_hud() -> void:
 	for i in range(health_icons.size()):
 		health_icons[i].visible = i < current_health

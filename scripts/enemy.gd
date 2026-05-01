@@ -8,11 +8,19 @@ extends CharacterBody2D
 @export var attack_range_x: float = 14.0
 @export var attack_range_y: float = 10.0
 @export var attack_cooldown: float = 1.0
+@export var can_be_countered: bool = true
+@export var respawn_delay: float = 1.5
 
 # 使用專案的重力設定，讓敵人和玩家一樣會落地。
 var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 var attack_timer: float = 0.0
 var attack_flash_timer: float = 0.0
+var is_defeated: bool = false
+var respawn_timer: float = 0.0
+var spawn_position: Vector2 = Vector2.ZERO
+var spawn_direction: int = -1
+var default_collision_layer: int = 0
+var default_collision_mask: int = 0
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var floor_ray: RayCast2D = $RayCast2D
@@ -21,10 +29,21 @@ var attack_flash_timer: float = 0.0
 
 func _ready() -> void:
 	add_to_group("Enemy")
+	spawn_position = global_position
+	spawn_direction = direction
+	default_collision_layer = collision_layer
+	default_collision_mask = collision_mask
 	floor_ray.position = Vector2.ZERO
 	_update_facing()
 
 func _physics_process(delta: float) -> void:
+	if is_defeated:
+		if respawn_timer > 0.0:
+			respawn_timer -= delta
+			if respawn_timer <= 0.0:
+				_respawn()
+		return
+
 	if attack_timer > 0.0:
 		attack_timer -= delta
 	if attack_flash_timer > 0.0:
@@ -72,6 +91,8 @@ func _physics_process(delta: float) -> void:
 		direction *= -1
 		_update_facing()
 
+	_try_counter_hit()
+
 func _update_facing() -> void:
 	animated_sprite.flip_h = direction > 0
 
@@ -97,3 +118,38 @@ func _try_attack() -> void:
 	attack_flash_timer = 0.15
 	animated_sprite.modulate = Color(1, 0.5, 0.5, 1)
 	player.take_damage(1, global_position.x)
+
+func _try_counter_hit() -> void:
+	if not can_be_countered or player == null:
+		return
+	if player.velocity.y <= 0.0:
+		return
+	var horizontal_distance: float = abs(player.global_position.x - global_position.x)
+	var vertical_offset: float = global_position.y - player.global_position.y
+	if horizontal_distance < 12.0 and vertical_offset > 6.0 and vertical_offset < 20.0:
+		_defeat_by_player()
+
+func _defeat_by_player() -> void:
+	is_defeated = true
+	respawn_timer = respawn_delay
+	global_position = spawn_position
+	velocity = Vector2.ZERO
+	animated_sprite.modulate = Color(1, 1, 1, 0.35)
+	visible = false
+	collision_layer = 0
+	collision_mask = 0
+	if player.has_method("heal"):
+		player.heal(1)
+		player.velocity.y = -220.0
+
+func _respawn() -> void:
+	is_defeated = false
+	respawn_timer = 0.0
+	global_position = spawn_position
+	direction = spawn_direction
+	velocity = Vector2.ZERO
+	visible = true
+	collision_layer = default_collision_layer
+	collision_mask = default_collision_mask
+	animated_sprite.modulate = Color(1, 1, 1, 1)
+	_update_facing()

@@ -73,3 +73,11 @@ func take_damage(amount: int, source_x: float = global_position.x):
 	if game_manager:
 		game_manager.set_health(health)
 	print("Player HP: ", health)
+
+func heal(amount: int) -> void:
+	health = min(health + amount, 5)
+	if game_manager:
+		game_manager.heal(amount)
+	modulate = Color(0.7, 1, 0.7, 1)
+	hurt_timer = 0.15
+	print("Player HP: ", health)
