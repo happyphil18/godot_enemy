@@ -1,13 +1,18 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource type="Script" path="res://scripts/game_manager.gd" id="1_l4ihi"]
 [ext_resource type="PackedScene" path="res://scenes/player.tscn" id="1_rbmkf"]
 [ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="2_3icg3"]
 [ext_resource type="FontFile" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="2_nlliu"]
 [ext_resource type="Texture2D" path="res://assets/sprites/world_tileset.png" id="2_r1crl"]
+[ext_resource type="Texture2D" path="res://assets/sprites/fruit.png" id="4_ny0ym"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="5_p57ef"]
 [ext_resource type="FontFile" path="res://assets/fonts/PixelOperator8.ttf" id="7_8cblx"]
 [ext_resource type="Script" path="res://scripts/enemy.gd" id="7_gee14"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fruit_hp"]
+atlas = ExtResource("4_ny0ym")
+region = Rect2(0, 16, 16, 16)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ashvg"]
 texture = ExtResource("2_r1crl")
@@ -193,6 +198,40 @@ text = "You collected X coins."
 horizontal_alignment = 1
 autowrap_mode = 2
 
+[node name="HealthHUD" type="CanvasLayer" parent="GameManager"]
+
+[node name="HealthRow" type="HBoxContainer" parent="GameManager/HealthHUD"]
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 132.0
+offset_bottom = 36.0
+theme_override_constants/separation = 4
+
+[node name="Fruit1" type="TextureRect" parent="GameManager/HealthHUD/HealthRow"]
+custom_minimum_size = Vector2(16, 16)
+texture = SubResource("AtlasTexture_fruit_hp")
+stretch_mode = 3
+
+[node name="Fruit2" type="TextureRect" parent="GameManager/HealthHUD/HealthRow"]
+custom_minimum_size = Vector2(16, 16)
+texture = SubResource("AtlasTexture_fruit_hp")
+stretch_mode = 3
+
+[node name="Fruit3" type="TextureRect" parent="GameManager/HealthHUD/HealthRow"]
+custom_minimum_size = Vector2(16, 16)
+texture = SubResource("AtlasTexture_fruit_hp")
+stretch_mode = 3
+
+[node name="Fruit4" type="TextureRect" parent="GameManager/HealthHUD/HealthRow"]
+custom_minimum_size = Vector2(16, 16)
+texture = SubResource("AtlasTexture_fruit_hp")
+stretch_mode = 3
+
+[node name="Fruit5" type="TextureRect" parent="GameManager/HealthHUD/HealthRow"]
+custom_minimum_size = Vector2(16, 16)
+texture = SubResource("AtlasTexture_fruit_hp")
+stretch_mode = 3
+
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_wvtw0")
 format = 2
@@ -253,6 +292,19 @@ speed = 42.0
 direction = -1
 can_chase = true
 detection_range = 140.0
+
+[node name="EnemyAttack" type="CharacterBody2D" parent="." instance=ExtResource("2_3icg3")]
+position = Vector2(1232, 152)
+collision_layer = 4
+script = ExtResource("7_gee14")
+speed = 46.0
+direction = -1
+can_chase = true
+detection_range = 150.0
+can_attack = true
+attack_range_x = 14.0
+attack_range_y = 10.0
+attack_cooldown = 0.9
 
 [node name="Labels" type="Node" parent="."]
 

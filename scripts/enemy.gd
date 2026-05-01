@@ -4,9 +4,15 @@ extends CharacterBody2D
 @export var direction: int = -1
 @export var can_chase: bool = false
 @export var detection_range: float = 120.0
+@export var can_attack: bool = false
+@export var attack_range_x: float = 14.0
+@export var attack_range_y: float = 10.0
+@export var attack_cooldown: float = 1.0
 
 # 使用專案的重力設定，讓敵人和玩家一樣會落地。
 var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
+var attack_timer: float = 0.0
+var attack_flash_timer: float = 0.0
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var floor_ray: RayCast2D = $RayCast2D
@@ -19,6 +25,13 @@ func _ready() -> void:
 	_update_facing()
 
 func _physics_process(delta: float) -> void:
+	if attack_timer > 0.0:
+		attack_timer -= delta
+	if attack_flash_timer > 0.0:
+		attack_flash_timer -= delta
+		if attack_flash_timer <= 0.0:
+			animated_sprite.modulate = Color(1, 1, 1, 1)
+
 	# 套用重力，讓敵人會掉落並站回平台上。
 	if not is_on_floor():
 		velocity.y += gravity * delta
@@ -44,8 +57,13 @@ func _physics_process(delta: float) -> void:
 			direction = -1
 			_update_facing()
 
-	# 巡邏的核心：持續朝目前方向移動。
-	velocity.x = direction * speed
+	# 第三關開始加入攻擊：靠得很近時先停下並對玩家造成傷害。
+	if can_attack and _is_player_in_attack_range():
+		velocity.x = 0.0
+		_try_attack()
+	else:
+		# 沒有進入攻擊距離時，就維持巡邏或追蹤移動。
+		velocity.x = direction * speed
 
 	move_and_slide()
 
@@ -62,3 +80,20 @@ func _is_player_in_range() -> bool:
 		return false
 	# 用敵人和玩家的距離，判斷玩家是否進入追蹤範圍。
 	return global_position.distance_to(player.global_position) < detection_range
+
+func _is_player_in_attack_range() -> bool:
+	if player == null:
+		return false
+	# 攻擊改成檢查水平與垂直距離，必須真的貼近玩家才算打到。
+	var horizontal_distance: float = abs(player.global_position.x - global_position.x)
+	var vertical_distance: float = abs(player.global_position.y - global_position.y)
+	return horizontal_distance < attack_range_x and vertical_distance < attack_range_y
+
+func _try_attack() -> void:
+	if attack_timer > 0.0:
+		return
+	# 攻擊成功後進入冷卻，避免每一幀都連續扣血。
+	attack_timer = attack_cooldown
+	attack_flash_timer = 0.15
+	animated_sprite.modulate = Color(1, 0.5, 0.5, 1)
+	player.take_damage(1, global_position.x)
