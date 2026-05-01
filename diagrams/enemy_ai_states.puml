@@ -1,0 +1,26 @@
+@startuml enemy_ai_states
+title 敵人 AI 狀態圖
+
+hide empty description
+
+state Patrol
+state Chase
+state Attack
+state Defeated
+state Respawn
+
+[*] --> Patrol
+
+Patrol --> Chase : 玩家進入偵測範圍，can_chase = true
+Chase --> Patrol : 玩家離開偵測範圍
+
+Chase --> Attack : 玩家進入攻擊範圍，can_attack = true
+Attack --> Chase : 玩家離開攻擊範圍
+
+Patrol --> Defeated : 玩家從上方反擊成功
+Chase --> Defeated : 玩家從上方反擊成功
+Attack --> Defeated : 玩家從上方反擊成功
+
+Defeated --> Respawn : respawn_timer 倒數結束
+Respawn --> Patrol : 回到出生位置並恢復行動
+@enduml

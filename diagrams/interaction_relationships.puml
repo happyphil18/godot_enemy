@@ -1,0 +1,43 @@
+@startuml
+left to right direction
+
+rectangle "Player\n玩家" as Player
+rectangle "Enemy\n敵人" as Enemy
+rectangle "GameManager\n管理分數與血量" as GameManager
+rectangle "HUD\nScoreLabel / HealthHUD" as HUD
+rectangle "RayCast2D\n平台邊緣偵測" as RayCast
+
+Player -[hidden]-> GameManager
+GameManager -[hidden]-> HUD
+RayCast -[hidden]down-> Enemy
+
+Enemy -right-> Player : a1 讀取位置 / 速度做攻擊與踩踏判定
+Enemy -[hidden]right-> Player
+Enemy --> Player : a2 攻擊時呼叫 take_damage
+Player --> GameManager : a3 呼叫 set_health
+GameManager --> HUD : a4 更新血量顯示
+
+note right of Player
+  攻擊分支
+  a1 -> a2 -> a3 -> a4
+end note
+
+Player -left-> Enemy : a5 從上方踩中敵人
+Enemy --> Player : a6 擊敗後呼叫 heal
+Player --> GameManager : a7 呼叫 heal
+GameManager --> HUD : a8 更新血量顯示
+
+note right of GameManager
+  踩踏分支
+  a1 -> a5 -> a6 -> a7 -> a8
+end note
+
+RayCast --> Enemy : b1 回報前方是否有地板
+Enemy --> Enemy : b2 依結果決定持續前進或轉向
+
+legend right
+  |= Flow |= 說明 |
+  | a | 戰鬥流程，共用 a1，之後分成攻擊分支與踩踏分支 |
+  | b | 敵人巡邏時的地板偵測與轉向流程 |
+endlegend
+@enduml
