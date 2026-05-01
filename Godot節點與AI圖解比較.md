@@ -14,7 +14,7 @@
 - `game.tscn` 中的敵人節點是 `enemy.tscn` 的實例
 - 同一張圖中另外展示 `enemy.tscn` 自己的樹狀結構
 
-PlantUML 檔案： [scene_tree_responsibility.puml](/Users/tywang/project/godot/enemy/diagrams/scene_tree_responsibility.puml)
+PlantUML 檔案： [scene_tree_responsibility.puml](diagrams/scene_tree_responsibility.puml)
 
 ---
 
@@ -26,7 +26,7 @@ PlantUML 檔案： [scene_tree_responsibility.puml](/Users/tywang/project/godot/
 - 誰會影響誰
 - 誰負責更新資料或畫面
 
-PlantUML 檔案： [interaction_relationships.puml](/Users/tywang/project/godot/enemy/diagrams/interaction_relationships.puml)
+PlantUML 檔案： [interaction_relationships.puml](diagrams/interaction_relationships.puml)
 
 ---
 
@@ -38,7 +38,7 @@ PlantUML 檔案： [interaction_relationships.puml](/Users/tywang/project/godot/
 - 狀態之間怎麼切換
 - 哪些條件會觸發追蹤、攻擊、被打敗與重生
 
-PlantUML 檔案： [enemy_ai_states.puml](/Users/tywang/project/godot/enemy/diagrams/enemy_ai_states.puml)
+PlantUML 檔案： [enemy_ai_states.puml](diagrams/enemy_ai_states.puml)
 
 ---
 
@@ -65,7 +65,7 @@ PlantUML 檔案： [enemy_ai_states.puml](/Users/tywang/project/godot/enemy/diag
 
 ### 第一步：先看 Scene Tree + Responsibility 圖
 
-先看 [scene_tree_responsibility.puml](/Users/tywang/project/godot/enemy/diagrams/scene_tree_responsibility.puml)。
+先看 [scene_tree_responsibility.puml](diagrams/scene_tree_responsibility.puml)。
 
 這一步的目標不是讀懂所有程式，而是先回答：
 
@@ -81,13 +81,13 @@ PlantUML 檔案： [enemy_ai_states.puml](/Users/tywang/project/godot/enemy/diag
 
 可以順便對照到程式檔案：
 
-- `Player` 對應 [player.gd](/Users/tywang/project/godot/enemy/scripts/player.gd:1)
-- `Enemy` 對應 [enemy.gd](/Users/tywang/project/godot/enemy/scripts/enemy.gd:1)
-- `GameManager` 對應 [game_manager.gd](/Users/tywang/project/godot/enemy/scripts/game_manager.gd:1)
+- `Player` 對應 [player.gd](scripts/player.gd:1)
+- `Enemy` 對應 [enemy.gd](scripts/enemy.gd:1)
+- `GameManager` 對應 [game_manager.gd](scripts/game_manager.gd:1)
 
 ### 第二步：再看 Interaction Relationships 圖
 
-接著看 [interaction_relationships.puml](/Users/tywang/project/godot/enemy/diagrams/interaction_relationships.puml)。
+接著看 [interaction_relationships.puml](diagrams/interaction_relationships.puml)。
 
 這張圖理解：
 
@@ -102,10 +102,10 @@ PlantUML 檔案： [enemy_ai_states.puml](/Users/tywang/project/godot/enemy/diag
 
 找對應程式：
 
-- 敵人攻擊玩家：[enemy.gd](/Users/tywang/project/godot/enemy/scripts/enemy.gd:113)
-- 玩家受傷後更新血量：[player.gd](/Users/tywang/project/godot/enemy/scripts/player.gd:67)
-- 玩家回血後通知管理者：[player.gd](/Users/tywang/project/godot/enemy/scripts/player.gd:77)
-- `GameManager` 更新 HUD：[game_manager.gd](/Users/tywang/project/godot/enemy/scripts/game_manager.gd:24)
+- 敵人攻擊玩家：[enemy.gd](scripts/enemy.gd:113)
+- 玩家受傷後更新血量：[player.gd](scripts/player.gd:67)
+- 玩家回血後通知管理者：[player.gd](scripts/player.gd:77)
+- `GameManager` 更新 HUD：[game_manager.gd](scripts/game_manager.gd:24)
 
 資料與畫面分開：
 
@@ -115,7 +115,7 @@ PlantUML 檔案： [enemy_ai_states.puml](/Users/tywang/project/godot/enemy/diag
 
 ### 第三步：最後看 Enemy AI State 圖
 
-最後再看 [enemy_ai_states.puml](/Users/tywang/project/godot/enemy/diagrams/enemy_ai_states.puml)。
+最後再看 [enemy_ai_states.puml](diagrams/enemy_ai_states.puml)。
 
 讀 `enemy.gd` 的 `_physics_process()`，因為這支程式本質上就是：
 
@@ -132,10 +132,10 @@ PlantUML 檔案： [enemy_ai_states.puml](/Users/tywang/project/godot/enemy/diag
 
 可以對照的程式位置：
 
-- 巡邏與地板偵測：[enemy.gd](/Users/tywang/project/godot/enemy/scripts/enemy.gd:58)
-- 追蹤玩家：[enemy.gd](/Users/tywang/project/godot/enemy/scripts/enemy.gd:68)
-- 攻擊玩家：[enemy.gd](/Users/tywang/project/godot/enemy/scripts/enemy.gd:79)
-- 被踩與重生：[enemy.gd](/Users/tywang/project/godot/enemy/scripts/enemy.gd:122)
+- 巡邏與地板偵測：[enemy.gd](scripts/enemy.gd:58)
+- 追蹤玩家：[enemy.gd](scripts/enemy.gd:68)
+- 攻擊玩家：[enemy.gd](scripts/enemy.gd:79)
+- 被踩與重生：[enemy.gd](scripts/enemy.gd:122)
 
 這樣學生比較容易理解：狀態圖不是額外的圖，而是 `enemy.gd` 的閱讀索引。
 
@@ -154,4 +154,3 @@ PlantUML 檔案： [enemy_ai_states.puml](/Users/tywang/project/godot/enemy/diag
 - 責任
 - 資料流
 - 狀態切換
-
