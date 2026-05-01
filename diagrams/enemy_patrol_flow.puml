@@ -1,0 +1,23 @@
+@startuml enemy_patrol_flow
+title 敵人 Patrol 邏輯圖
+
+start
+:套用重力;
+:RayCast 指向前下方;
+:更新 RayCast 偵測結果;
+
+if (站在地板上\n且前方沒有地板?) then (是)
+  :direction *= -1;
+  :更新朝向;
+endif
+
+:velocity.x = direction * speed;
+:move_and_slide();
+
+if (撞牆?) then (是)
+  :direction *= -1;
+  :更新朝向;
+endif
+
+stop
+@enduml

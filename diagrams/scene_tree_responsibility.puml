@@ -1,0 +1,25 @@
+@startmindmap
+title Game Scene Tree + enemy.tscn 巡邏版實例化關係圖
+* Godot 場景結構
+** game.tscn : Node2D\n主場景
+*** GameManager : Node\n管理分數 UI
+**** ScoreLabel : Label\n顯示分數文字
+*** TileMap : TileMap\n地圖與平台
+*** Player : CharacterBody2D\n玩家移動、跳躍、動畫
+**** AnimatedSprite2D : AnimatedSprite2D\n播放玩家動畫
+**** CollisionShape2D : CollisionShape2D\n玩家碰撞範圍
+**** Camera2D : Camera2D\n跟隨玩家視角
+*** EnemyPatrol : CharacterBody2D\nenemy.tscn 實例，基礎巡邏敵人
+*** EnemyPatrolMedium : CharacterBody2D\nenemy.tscn 實例，中速巡邏敵人
+*** EnemyPatrolFast : CharacterBody2D\nenemy.tscn 實例，高速巡邏敵人
+*** EnemyPatrolGround : CharacterBody2D\nenemy.tscn 實例，地面巡邏敵人
+*** Labels : Node\n關卡說明文字容器
+**** Label : Label\n第 1 關說明
+**** Label2 : Label\n第 2 關說明
+**** Label3 : Label\n第 3 關說明
+**** Label4 : Label\n第 4 關說明
+** enemy.tscn : CharacterBody2D\n共用敵人場景模板
+*** AnimatedSprite2D : AnimatedSprite2D\n播放敵人移動動畫
+*** CollisionShape2D : CollisionShape2D\n敵人碰撞範圍
+*** RayCast2D : RayCast2D\n偵測前下方是否有地板
+@endmindmap

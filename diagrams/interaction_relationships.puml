@@ -1,0 +1,30 @@
+@startuml
+left to right direction
+
+rectangle "Player\n玩家" as Player
+rectangle "Enemy\n敵人" as Enemy
+rectangle "RayCast2D\n平台邊緣偵測" as RayCast
+rectangle "Wall / TileMap\n平台與牆面" as World
+rectangle "AnimatedSprite2D\n敵人朝向顯示" as EnemySprite
+
+RayCast -[hidden]down-> Enemy
+Enemy -[hidden]-> EnemySprite
+World -[hidden]down-> Player
+
+RayCast --> Enemy : a1 回報前方是否仍有地板
+Enemy --> Enemy : a2 無地板時反轉 direction
+Enemy --> EnemySprite : a3 _update_facing 更新朝向
+
+World --> Enemy : b1 撞牆時 is_on_wall() 為 true
+Enemy --> Enemy : b2 反轉 direction
+Enemy --> EnemySprite : b3 _update_facing 更新朝向
+
+Player --> World : c1 在平台上移動與跳躍
+
+legend right
+  |= Flow |= 說明 |
+  | a | 巡邏時，因前方沒有地板而轉向 |
+  | b | 巡邏時，因撞牆而轉向 |
+  | c | 玩家與平台的基本移動關係 |
+endlegend
+@enduml
